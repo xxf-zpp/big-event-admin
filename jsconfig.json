@@ -4,5 +4,6 @@
       "@/*": ["./src/*"]
     }
   },
+  "include": ["src/**/*", "auto-imports.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
