@@ -1,10 +1,13 @@
 <script setup>
-import { artGetArticleChannelListService } from '@/api/article'
+import { artDeleteArictleCategoryService, artGetArticleChannelListService } from '@/api/article'
 import { ref } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
+import EditDialog from './components/EditDialog.vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const articleList = ref([])
 const loading = ref(false)
+const editDailog = ref()
 
 const getArticleList = async () => {
   loading.value = true
@@ -14,19 +17,34 @@ const getArticleList = async () => {
 }
 getArticleList()
 
-const handleEdit = ($index, row) => {
-  console.log($index, row, '当前行数据………………编辑')
+const handelAddCategory = () => {
+  editDailog.value.open({})
 }
 
-const handleDelete = ($index, row) => {
-  console.log($index, row, '当前行数据………………删除')
+const handleEdit = (row) => {
+  editDailog.value.open(row)
+}
+
+const handleDelete = async (row) => {
+  await ElMessageBox.confirm('你确认删除该分类信息吗？', '温馨提示', {
+    type: 'warning',
+    confirmButtonText: '确认',
+    cancelButtonText: '取消'
+  })
+  await artDeleteArictleCategoryService(row.id)
+  ElMessage({ type: 'success', message: '删除成功' })
+  getArticleList()
+}
+
+const handleSuccess = () => {
+  getArticleList()
 }
 </script>
 
 <template>
   <page-container title="文章分类">
     <template #extra>
-      <el-button type="primary">添加分类</el-button>
+      <el-button type="primary" @click="handelAddCategory()">添加分类</el-button>
     </template>
     <el-table :data="articleList" width="100%" v-loading="loading">
       <el-table-column type="index" label="序号" width="100px"></el-table-column>
@@ -35,14 +53,14 @@ const handleDelete = ($index, row) => {
       <el-table-column label="操作" width="100px">
         <template #default="scope">
           <el-button
-            @click="handleEdit(scope.$index, scope.row)"
+            @click="handleEdit(scope.row)"
             type="primary"
             :icon="Edit"
             circle
             plain
           ></el-button>
           <el-button
-            @click="handleDelete(scope.$index, scope.row)"
+            @click="handleDelete(scope.row)"
             type="danger"
             :icon="Delete"
             circle
@@ -54,6 +72,7 @@ const handleDelete = ($index, row) => {
         <el-empty description="当前没有数据……" />
       </template>
     </el-table>
+    <edit-dialog ref="editDailog" @success="handleSuccess()"></edit-dialog>
   </page-container>
 </template>
 
