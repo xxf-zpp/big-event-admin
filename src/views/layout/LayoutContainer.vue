@@ -11,15 +11,18 @@ import {
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 import { ElMessageBox } from 'element-plus'
 import router from '@/router'
+import { onMounted } from 'vue'
 
 const userStore = useUserStore()
+const { userInfo } = storeToRefs(userStore)
 
 // 获取用户信息
-userStore.getUserInfo()
-const userInfo = userStore.userInfo
-
+onMounted(() => {
+  userStore.getUserInfo()
+})
 // 退出登录
 const onCommand = async (command) => {
   if (command === 'logout') {
