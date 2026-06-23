@@ -25,10 +25,12 @@ defineProps({
 .page-container {
   min-height: 100%;
   box-sizing: border-box;
+
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     span {
       font-size: 20px;
       font-weight: bold;

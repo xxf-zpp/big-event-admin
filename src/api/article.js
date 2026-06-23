@@ -23,3 +23,10 @@ export const artDeleteArictleCategoryService = (id) => {
     }
   })
 }
+
+// 获取文章列表
+export const artGetArticleListService = (params) => {
+  return request.get('/my/article/list', {
+    params: params
+  })
+}
