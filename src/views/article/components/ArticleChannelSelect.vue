@@ -7,6 +7,9 @@ const articleList = ref([])
 defineProps({
   modelValue: {
     type: [Number, String]
+  },
+  width: {
+    type: String
   }
 })
 
@@ -25,6 +28,7 @@ getArticelChannelList()
     placeholder="请选择"
     :modelValue="modelValue"
     @update:modelValue="emit('update:modelValue', $event)"
+    :style="{ width }"
   >
     <el-option
       v-for="item in articleList"

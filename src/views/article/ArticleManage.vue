@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import ArticleChannelSelect from './components/ArticleChannelSelect.vue'
 import { artGetArticleListService } from '@/api/article.js'
 import { formatTime } from '@/utils/format.js'
+import ArticleEditDrawer from './components/ArticleEditDrawer.vue'
 
 const tableData = ref([])
 const params = ref({
@@ -14,13 +15,14 @@ const params = ref({
 })
 const total = ref(0)
 const loading = ref(false)
+const drawerRef = ref()
 
 const handleDel = (row) => {
   console.log(row)
 }
 
 const handleEdit = (row) => {
-  console.log(row)
+  drawerRef.value.open(row, '编辑文章')
 }
 
 const getArticleList = async () => {
@@ -49,6 +51,10 @@ const handleCurrentChange = (page) => {
   getArticleList()
 }
 
+const onAddArticle = () => {
+  drawerRef.value.open({})
+}
+
 getArticleList()
 </script>
 
@@ -56,7 +62,7 @@ getArticleList()
   <page-container title="文章管理">
     <!-- 头部区域 -->
     <template #extra>
-      <el-button type="primary">添加文章</el-button>
+      <el-button type="primary" @click="onAddArticle()">添加文章</el-button>
     </template>
     <!-- 表单区域 -->
     <el-form inline>
@@ -127,6 +133,8 @@ getArticleList()
       @current-change="handleCurrentChange"
       style="margin-top: 20px; justify-content: flex-end"
     />
+    <!-- 编辑抽屉区域 -->
+    <article-edit-drawer ref="drawerRef"></article-edit-drawer>
   </page-container>
 </template>
 
